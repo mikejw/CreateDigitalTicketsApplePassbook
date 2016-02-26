@@ -76,12 +76,15 @@ $app->post('/', function() use ($app) {
         }
         
         // Process Pass data
-        try {
+        try {            
             // Load pass from template
+
+            $pass_path = dirname(__FILE__) . '/../'. $app->config('passes.path') . '/' . $app->config('passes.passType') . '.raw' . '/pass.json';
+
             $data = json_decode(
                 file_get_contents(
-                    $app->config('passes.path') . '/' . $app->config('passes.passType') . '.raw' . '/pass.json'
-                ),
+                    $pass_path
+                ),                    
                 true
             );
             if (!$data) {
@@ -94,7 +97,7 @@ $app->post('/', function() use ($app) {
             }
 
             $env = $app->environment();
-            
+        
             // Insert pass subscriber data
             $data['serialNumber'] = $subscriber->id;
             $data['webServiceURL'] = sprintf('https://%s/%s/', $env['SERVER_NAME'], $app->request()->getRootUri());
@@ -162,10 +165,18 @@ $app->post('/', function() use ($app) {
             $errors['pass'] = $e->getMessage();
         }
 
+
+        print_r($errors);
+
+
         // Delete the subscription and pass
         // we could also use transactions here
         if (!empty($errors['pass'])) {
-            @unlink($app->config('passes.store') . '/' . $pass->filename() . '.pkpass');
+            // @unlink($app->config('passes.store') . '/' . $pass->filename() . '.pkpass');
+            $pass_file = dirname(__FILE__) . '/../'.$app->config('passes.store') . '/' . $pass->filename() . '.pkpass';
+            if (file_exists($pass_file)) {
+                unlink($pass_file);
+            }
             $pass->delete();
         }
 

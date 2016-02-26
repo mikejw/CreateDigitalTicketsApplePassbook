@@ -96,7 +96,7 @@ class Pass extends Model
         // Creates a directory for the pass and copy the necessary files
         // eg. source/MemberID/src
         // The final pass file is saved to source/MemberID.pkpass
-        $workDir = "$dest/" . $this->filename();
+        $workDir = dirname(__FILE__) . '/../../'. "$dest/" . $this->filename();
         // Try to delete if already exists
         if (file_exists($workDir) && is_dir($workDir)) {
             if (!PassSigner::rrmdir($workDir)) {

@@ -84,6 +84,9 @@ class PassSigner
         );
         $signResult = false;
         $signOut = array(); // needed but unused
+
+        echo 'command: '.$signCommand;
+
         exec($signCommand, $signOut, $signResult);
         unset($signOut);
         

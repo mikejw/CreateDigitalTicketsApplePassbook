@@ -10,7 +10,7 @@ CREATE TABLE passes (
   PRIMARY KEY (id),
   KEY type (`type`),
   KEY auth_token (auth_token),
-  KEY user_id` (subscriber_id)
+  KEY `user_id` (subscriber_id)
 )
 ENGINE=InnoDB;
 
